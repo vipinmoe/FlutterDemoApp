@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:moengage_flutter/app_status.dart';
 import 'package:moengage_flutter/gender.dart';
@@ -6,9 +8,9 @@ import 'package:moengage_flutter/inapp_campaign.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_flutter/properties.dart';
 import 'package:moengage_flutter/push_campaign.dart';
+import 'package:moengage_inbox/inbox_data.dart';
+import 'package:moengage_inbox/moengage_inbox.dart';
 import 'package:package_info/package_info.dart';
-import 'dart:async';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -23,6 +25,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MoEngageFlutter _moengagePlugin = MoEngageFlutter();
+  final MoEngageInbox _moEngageInbox = MoEngageInbox();
 
   PackageInfo _packageInfo = PackageInfo(
     appName: 'Unknown',
@@ -41,8 +44,7 @@ class _MyAppState extends State<MyApp> {
         onInAppShown: _onInAppShown,
         onInAppDismiss: _onInAppDismiss,
         onInAppCustomAction: _onInAppCustomAction,
-        onInAppSelfHandle: _onInAppSelfHandle
-    );
+        onInAppSelfHandle: _onInAppSelfHandle);
     _initPackageInfo();
   }
 
@@ -117,11 +119,29 @@ class _MyAppState extends State<MyApp> {
                     _moengagePlugin.showInApp();
                   },
                   child: Text("Show InApp"),
-                ), RaisedButton(
+                ),
+                RaisedButton(
                   onPressed: () {
                     _moengagePlugin.getSelfHandledInApp();
                   },
                   child: Text("Show Self Handled InApp"),
+                ),
+                RaisedButton(
+                  onPressed: () async {
+                    int count = await _moEngageInbox.getUnClickedCount();
+                    print("Unclicked Message Count " + count.toString());
+                  },
+                  child: Text("Get Unclicked Message Count"),
+                ),
+                RaisedButton(
+                  onPressed: () async {
+                    InboxData data = await _moEngageInbox.fetchAllMessages();
+                    print("messages: " + data.toString());
+                    for (final message in data.messages) {
+                      print(message.toString());
+                    }
+                  },
+                  child: Text("Fetch All Messages"),
                 ),
               ],
             ),
@@ -180,5 +200,7 @@ class _MyAppState extends State<MyApp> {
 
   void _onInAppSelfHandle(InAppCampaign message) {
     print("_onInAppSelfHandle() : Payload " + message.toString());
+    _moengagePlugin.selfHandledShown(message);
+    _moengagePlugin.selfHandledDismissed(message);
   }
 }
