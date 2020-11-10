@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:moengage_flutter/app_status.dart';
 import 'package:moengage_flutter/gender.dart';
 import 'package:moengage_flutter/geo_location.dart';
+import 'package:moengage_flutter/inapp_campaign.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_flutter/properties.dart';
+import 'package:moengage_flutter/push_campaign.dart';
 import 'package:package_info/package_info.dart';
 import 'dart:async';
 
@@ -33,6 +35,14 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _moengagePlugin.initialise();
+    _moengagePlugin.setUpPushCallbacks(_onPushClick);
+    _moengagePlugin.setUpInAppCallbacks(
+        onInAppClick: _onInAppClick,
+        onInAppShown: _onInAppShown,
+        onInAppDismiss: _onInAppDismiss,
+        onInAppCustomAction: _onInAppCustomAction,
+        onInAppSelfHandle: _onInAppSelfHandle
+    );
     _initPackageInfo();
   }
 
@@ -58,37 +68,60 @@ class _MyAppState extends State<MyApp> {
                     _moengagePlugin.setUniqueId("8708153354");
                   },
                   child: Text("Login"),
-                ), RaisedButton(
+                ),
+                RaisedButton(
                   onPressed: () {
                     _moengagePlugin.logout();
                   },
                   child: Text("Logout"),
-                ), RaisedButton(
+                ),
+                RaisedButton(
                   onPressed: () {
                     _moengagePlugin.setUserName("Vipin Kumar");
                     _moengagePlugin.setFirstName("Vipin");
                     _moengagePlugin.setLastName("Kumar");
                     _moengagePlugin.setEmail("vicky7230@gmail.com");
                     _moengagePlugin.setPhoneNumber("8708153354");
-                    _moengagePlugin.setGender(MoEGender.male); // Supported values also include MoEGender.female OR MoEGender.other
-                    _moengagePlugin.setLocation(new MoEGeoLocation(23.1, 21.2)); // Pass coordinates with MoEGeoLocation instance
-                    _moengagePlugin.setBirthDate("2000-12-02T08:26:21.170Z"); // date format - ` yyyy-MM-dd'T'HH:mm:ss.fff'Z'`
+                    _moengagePlugin.setGender(MoEGender
+                        .male); // Supported values also include MoEGender.female OR MoEGender.other
+                    _moengagePlugin.setLocation(new MoEGeoLocation(23.1,
+                        21.2)); // Pass coordinates with MoEGeoLocation instance
+                    _moengagePlugin.setBirthDate(
+                        "2000-12-02T08:26:21.170Z"); // date format - ` yyyy-MM-dd'T'HH:mm:ss.fff'Z'`
                   },
                   child: Text("Track attributes"),
-                ), RaisedButton(
+                ),
+                RaisedButton(
                   onPressed: () {
                     var properties = MoEProperties();
-                    properties.addAttribute( "test_string", "Apple")
+                    properties
+                        .addAttribute("test_string", "Apple")
                         .addAttribute("test_int", 789)
                         .addAttribute("test_bool", false)
                         .addAttribute("attr_double", 12.32)
-                        .addAttribute("attr_location", new MoEGeoLocation( 12.1, 77.18) )
-                        .addAttribute("attr_array", ["item1", "item2", "item3"])
-                        .addISODateTime("attr_date", "2019-12-02T08:26:21.170Z");
+                        .addAttribute(
+                            "attr_location", new MoEGeoLocation(12.1, 77.18))
+                        .addAttribute("attr_array", [
+                      "item1",
+                      "item2",
+                      "item3"
+                    ]).addISODateTime("attr_date", "2019-12-02T08:26:21.170Z");
 
-                    _moengagePlugin.trackEvent('Flutter_test_Event', properties);
+                    _moengagePlugin.trackEvent(
+                        'Flutter_test_Event', properties);
                   },
                   child: Text("Track Events"),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    _moengagePlugin.showInApp();
+                  },
+                  child: Text("Show InApp"),
+                ), RaisedButton(
+                  onPressed: () {
+                    _moengagePlugin.getSelfHandledInApp();
+                  },
+                  child: Text("Show Self Handled InApp"),
                 ),
               ],
             ),
@@ -123,5 +156,29 @@ class _MyAppState extends State<MyApp> {
     //set the new version
     code = int.parse(_packageInfo.buildNumber);
     await prefs.setInt("version_code", code);
+  }
+
+  void _onPushClick(PushCampaign message) {
+    print("_onPushClick() : Payload " + message.toString());
+  }
+
+  void _onInAppClick(InAppCampaign message) {
+    print("_onInAppClick() : Payload " + message.toString());
+  }
+
+  void _onInAppShown(InAppCampaign message) {
+    print("_onInAppShown() : Payload " + message.toString());
+  }
+
+  void _onInAppDismiss(InAppCampaign message) {
+    print("_onInAppDismiss() : Payload " + message.toString());
+  }
+
+  void _onInAppCustomAction(InAppCampaign message) {
+    print("_onInAppCustomAction() : Payload " + message.toString());
+  }
+
+  void _onInAppSelfHandle(InAppCampaign message) {
+    print("_onInAppSelfHandle() : Payload " + message.toString());
   }
 }
