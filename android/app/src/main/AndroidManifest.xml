@@ -126,6 +126,14 @@
             </intent-filter>
         </receiver>
         <!-- MoEngage SDK to handle token registration and push notification End-->
-
+        <!-- for HMS Start-->
+        <service
+            android:name="com.moengage.hms.pushkit.MoEPushKitMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- for HMS End-->
     </application>
 </manifest>

@@ -35,13 +35,16 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.vicky7230.flutter_app"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
@@ -63,8 +66,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation("com.moengage:addon-inbox:5.3.0")
     implementation "com.moengage:push-amp-plus:2.1.00"
+    implementation "com.moengage:hms-pushkit:1.1.00"
 
     implementation 'com.google.firebase:firebase-messaging:21.0.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
+
+    implementation 'com.huawei.agconnect:agconnect-core:1.4.1.300'
+    implementation 'com.huawei.hms:push:5.0.2.300'
+
 }
+
+apply plugin: 'com.huawei.agconnect'

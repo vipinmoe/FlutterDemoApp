@@ -25,6 +25,7 @@ public class MyApplication extends FlutterApplication {
         super.onCreate();
         MoEngage.Builder builder = new Builder(this, "U8RR6TSZPEM5EWFBCZBNJVIJ")
                 .configureMiPush("2882303761518810740", "5881881071740", true)
+                .enablePushKitTokenRegistration()
                 .setNotificationSmallIcon(R.drawable.ic_snow)
                 .setNotificationLargeIcon(R.drawable.download)
                 .optOutDefaultInAppDisplay()
