@@ -30,6 +30,7 @@ public class MyApplication extends FlutterApplication {
                 .setNotificationLargeIcon(R.drawable.download)
                 .optOutDefaultInAppDisplay()
                 .setLogLevel(Logger.VERBOSE)
+                .enableLogsForSignedBuild()
                 .enableMultipleNotificationInDrawer()
                 .enableLocationServices()
                 .optOutTokenRegistration();
