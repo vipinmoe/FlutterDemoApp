@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  moengage_flutter: ^2.0.1
+  moengage_flutter: ^3.0.0
   shared_preferences: ^0.5.12+4
   package_info: ^0.4.3+2
   moengage_inbox: ^1.0.1
