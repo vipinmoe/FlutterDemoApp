@@ -13,6 +13,7 @@ import com.moengage.core.config.NotificationConfig;
 import com.moengage.flutter.MoEInitializer;
 import com.moengage.mi.MoEMiPushHelper;
 import com.moengage.mi.listener.MiPushEventListener;
+import com.moengage.pushbase.MoEPushHelper;
 import com.xiaomi.mipush.sdk.MiPushMessage;
 
 import io.flutter.app.FlutterApplication;
@@ -49,6 +50,8 @@ public class MyApplication extends FlutterApplication {
                 );
 
         MoEInitializer.initialize(getApplicationContext(), builder);
+
+        MoEPushHelper.getInstance().setMessageListener(new CustomPushListener());
 
         /*MoEGeofenceHelper.getInstance().registerGeofenceHitListener(new OnGeofenceHitListener() {
             @Override
