@@ -3,6 +3,7 @@ package com.vicky7230.flutter_app;
 import android.content.Context;
 import android.util.Log;
 
+import com.moe.pushlibrary.MoEHelper;
 import com.moengage.core.LogLevel;
 import com.moengage.core.MoEngage;
 import com.moengage.core.MoEngage.Builder;
@@ -13,6 +14,7 @@ import com.moengage.core.config.NotificationConfig;
 import com.moengage.flutter.MoEInitializer;
 import com.moengage.mi.MoEMiPushHelper;
 import com.moengage.mi.listener.MiPushEventListener;
+import com.moengage.pushbase.MoEPushHelper;
 import com.xiaomi.mipush.sdk.MiPushMessage;
 
 import io.flutter.app.FlutterApplication;
@@ -49,6 +51,8 @@ public class MyApplication extends FlutterApplication {
                 );
 
         MoEInitializer.initialize(getApplicationContext(), builder);
+
+        MoEPushHelper.getInstance().setMessageListener(new MyListener());
 
         /*MoEGeofenceHelper.getInstance().registerGeofenceHitListener(new OnGeofenceHitListener() {
             @Override
