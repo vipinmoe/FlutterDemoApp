@@ -11,10 +11,10 @@ import 'package:moengage_flutter/push_campaign.dart';
 import 'package:moengage_inbox/inbox_data.dart';
 import 'package:moengage_inbox/moengage_inbox.dart';
 import 'package:package_info/package_info.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  SharedPreferences.setMockInitialValues({});
+  //SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
 }
 
@@ -45,6 +45,10 @@ class _MyAppState extends State<MyApp> {
         onInAppDismiss: _onInAppDismiss,
         onInAppCustomAction: _onInAppCustomAction,
         onInAppSelfHandle: _onInAppSelfHandle);
+      _moengagePlugin.setUpPushTokenCallback((pushToken) {
+        print("Got push token id from MOE");
+        print("onTokenAvailable :  " + pushToken.token);
+      });  
     _initPackageInfo();
   }
 
@@ -159,23 +163,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   _installUpdate() async {
-    debugPrint("Install or update");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int code = prefs.getInt("version_code");
-    if (code == null) {
-      debugPrint("Fresh Install, version code : " + _packageInfo.buildNumber);
-      _moengagePlugin.setAppStatus(MoEAppStatus.install);
-    } else {
-      if (int.parse(_packageInfo.buildNumber) > code) {
-        debugPrint("Update, version code : " + _packageInfo.buildNumber);
-        _moengagePlugin.setAppStatus(MoEAppStatus.update);
-      } else {
-        debugPrint("No action required for install or update");
-      }
-    }
-    //set the new version
-    code = int.parse(_packageInfo.buildNumber);
-    await prefs.setInt("version_code", code);
+    // debugPrint("Install or update");
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // int code = prefs.getInt("version_code");
+    // if (code == null) {
+    //   debugPrint("Fresh Install, version code : " + _packageInfo.buildNumber);
+    //   _moengagePlugin.setAppStatus(MoEAppStatus.install);
+    // } else {
+    //   if (int.parse(_packageInfo.buildNumber) > code) {
+    //     debugPrint("Update, version code : " + _packageInfo.buildNumber);
+    //     _moengagePlugin.setAppStatus(MoEAppStatus.update);
+    //   } else {
+    //     debugPrint("No action required for install or update");
+    //   }
+    // }
+    // //set the new version
+    // code = int.parse(_packageInfo.buildNumber);
+    // await prefs.setInt("version_code", code);
   }
 
   void _onPushClick(PushCampaign message) {

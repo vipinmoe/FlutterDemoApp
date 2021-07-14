@@ -9,6 +9,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.moengage.firebase.MoEFireBaseHelper;
 import com.moengage.pushbase.MoEPushHelper;
 
+/*
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
@@ -32,4 +33,4 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         MoEFireBaseHelper.Companion.getInstance().passPushToken(getApplicationContext(), token);
     }
 
-}
+}*/

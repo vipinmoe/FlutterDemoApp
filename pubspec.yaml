@@ -23,10 +23,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  moengage_flutter: ^4.0.0
-  shared_preferences: ^0.5.12+4
+  moengage_flutter: ^4.0.1
+  #shared_preferences: ^0.5.12+4
   package_info: ^0.4.3+2
   moengage_inbox: ^3.0.0
+  firebase_core: ^1.1.0
+  firebase_messaging: ^10.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
