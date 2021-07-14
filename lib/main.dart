@@ -13,9 +13,72 @@ import 'package:moengage_inbox/moengage_inbox.dart';
 import 'package:package_info/package_info.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  //SharedPreferences.setMockInitialValues({});
-  runApp(MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+final MoEngageFlutter _moengagePlugin = MoEngageFlutter();
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+
+  print('Handling a background message ${message.messageId}');
+  _moengagePlugin.initialise();
+  _moengagePlugin.passFCMPushPayload(message.data);
+}
+
+/// Create a [AndroidNotificationChannel] for heads up notifications
+AndroidNotificationChannel channel;
+
+/// Initialize the [FlutterLocalNotificationsPlugin] package.
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  // Set the background messaging handler early on, as a named top-level function
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  if (!kIsWeb) {
+    channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      'This channel is used for important notifications.', // description
+      importance: Importance.high,
+    );
+
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    /// Create an Android Notification Channel.
+    ///
+    /// We use this channel in the `AndroidManifest.xml` file to override the
+    /// default FCM channel to enable heads up notifications.
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    /// Update the iOS foreground notification presentation options to allow
+    /// heads up notifications.
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
+  runApp(MessagingExampleApp());
+}
+
+/// Entry point for the example application.
+class MessagingExampleApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MyApp();
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -24,7 +87,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final MoEngageFlutter _moengagePlugin = MoEngageFlutter();
   final MoEngageInbox _moEngageInbox = MoEngageInbox();
 
   PackageInfo _packageInfo = PackageInfo(
@@ -45,11 +107,23 @@ class _MyAppState extends State<MyApp> {
         onInAppDismiss: _onInAppDismiss,
         onInAppCustomAction: _onInAppCustomAction,
         onInAppSelfHandle: _onInAppSelfHandle);
-      _moengagePlugin.setUpPushTokenCallback((pushToken) {
-        print("Got push token id from MOE");
-        print("onTokenAvailable :  " + pushToken.token);
-      });  
+    _moengagePlugin.setUpPushTokenCallback((pushToken) {
+      print("Got push token id from MOE");
+      print("onTokenAvailable :  " + pushToken.token);
+    });
     _initPackageInfo();
+
+    FirebaseMessaging.instance.getToken().then((token) {
+      _moengagePlugin.passFCMPushToken(token);
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _moengagePlugin.passFCMPushPayload(message.data);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+    });
   }
 
   @override
