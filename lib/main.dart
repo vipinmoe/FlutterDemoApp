@@ -79,6 +79,12 @@ class _MyAppState extends State<MyApp> {
                 ),
                 RaisedButton(
                   onPressed: () {
+                    _moengagePlugin.optOutDataTracking(true);
+                  },
+                  child: Text("optOutTracking"),
+                ),
+                RaisedButton(
+                  onPressed: () {
                     _moengagePlugin.setUserName("Vipin Kumar");
                     _moengagePlugin.setFirstName("Vipin");
                     _moengagePlugin.setLastName("Kumar");
@@ -107,7 +113,7 @@ class _MyAppState extends State<MyApp> {
                       "item1",
                       "item2",
                       "item3"
-                    ]).addISODateTime("attr_date", "2019-12-02T08:26:21.170Z");
+                    ]).addISODateTime("attr_date", "2021-08-18T09:57:21.170Z");
 
                     _moengagePlugin.trackEvent(
                         'Flutter_test_Event', properties);

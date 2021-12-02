@@ -12,10 +12,10 @@ import com.moengage.core.config.InAppConfig;
 import com.moengage.core.config.LogConfig;
 import com.moengage.core.config.NotificationConfig;
 import com.moengage.flutter.MoEInitializer;
-import com.moengage.mi.MoEMiPushHelper;
-import com.moengage.mi.listener.MiPushEventListener;
+//import com.moengage.mi.MoEMiPushHelper;
+//import com.moengage.mi.listener.MiPushEventListener;
 import com.moengage.pushbase.MoEPushHelper;
-import com.xiaomi.mipush.sdk.MiPushMessage;
+//import com.xiaomi.mipush.sdk.MiPushMessage;
 
 import io.flutter.app.FlutterApplication;
 
@@ -52,7 +52,7 @@ public class MyApplication extends FlutterApplication {
 
         MoEInitializer.initialize(getApplicationContext(), builder);
 
-        MoEPushHelper.getInstance().setMessageListener(new MyListener());
+        //MoEPushHelper.getInstance().setMessageListener(new MyListener());
 
         /*MoEGeofenceHelper.getInstance().registerGeofenceHitListener(new OnGeofenceHitListener() {
             @Override
@@ -62,21 +62,21 @@ public class MyApplication extends FlutterApplication {
             }
         });*/
 
-        MoEMiPushHelper.Companion.getInstance().setEventListener(new MiPushEventListener() {
-            @Override
-            public void onNonMoEngageNotificationClicked(Context context, MiPushMessage message) {
-                super.onNonMoEngageNotificationClicked(context, message);
-            }
+        // MoEMiPushHelper.Companion.getInstance().setEventListener(new MiPushEventListener() {
+        //     @Override
+        //     public void onNonMoEngageNotificationClicked(Context context, MiPushMessage message) {
+        //         super.onNonMoEngageNotificationClicked(context, message);
+        //     }
 
-            @Override
-            public void onNonMoEngagePassThroughMessage(Context context, MiPushMessage message) {
-                super.onNonMoEngagePassThroughMessage(context, message);
-            }
+        //     @Override
+        //     public void onNonMoEngagePassThroughMessage(Context context, MiPushMessage message) {
+        //         super.onNonMoEngagePassThroughMessage(context, message);
+        //     }
 
-            @Override
-            public void onTokenAvailable(String token) {
-                Log.e("TOKEN", "Received Mi Push Token : " + token);
-            }
-        });
+        //     @Override
+        //     public void onTokenAvailable(String token) {
+        //         Log.e("TOKEN", "Received Mi Push Token : " + token);
+        //     }
+        // });
     }
 }
