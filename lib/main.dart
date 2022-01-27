@@ -8,8 +8,8 @@ import 'package:moengage_flutter/inapp_campaign.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_flutter/properties.dart';
 import 'package:moengage_flutter/push_campaign.dart';
-import 'package:moengage_inbox/inbox_data.dart';
-import 'package:moengage_inbox/moengage_inbox.dart';
+/*import 'package:moengage_inbox/inbox_data.dart';
+import 'package:moengage_inbox/moengage_inbox.dart';*/
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,7 +25,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MoEngageFlutter _moengagePlugin = MoEngageFlutter();
-  final MoEngageInbox _moEngageInbox = MoEngageInbox();
+  //final MoEngageInbox _moEngageInbox = MoEngageInbox();
 
   PackageInfo _packageInfo = PackageInfo(
     appName: 'Unknown',
@@ -134,18 +134,24 @@ class _MyAppState extends State<MyApp> {
                 ),
                 RaisedButton(
                   onPressed: () async {
-                    int count = await _moEngageInbox.getUnClickedCount();
-                    print("Unclicked Message Count " + count.toString());
+                    //int count = await _moEngageInbox.getUnClickedCount();
+                    //print("Unclicked Message Count " + count.toString());
                   },
                   child: Text("Get Unclicked Message Count"),
                 ),
                 RaisedButton(
                   onPressed: () async {
-                    InboxData data = await _moEngageInbox.fetchAllMessages();
-                    print("messages: " + data.toString());
+                    //InboxData data = await _moEngageInbox.fetchAllMessages();
+                    /*print("messages: " + data.toString());
                     for (final message in data.messages) {
                       print(message.toString());
-                    }
+                    }*/
+                  },
+                  child: Text("Fetch All Messages"),
+                ),
+                RaisedButton(
+                  onPressed: ()  {
+                    _moengagePlugin.optOutPushTracking(false);
                   },
                   child: Text("Fetch All Messages"),
                 ),

@@ -32,12 +32,12 @@ public class MyApplication extends FlutterApplication {
                                 -1,
                                 null,
                                 true,
-                                true,
+                                false,
                                 true
                         )
                 )
                 .configureFcm(new FcmConfig(
-                        false
+                        true
                 ))
                 .configureInApps(new InAppConfig(
                         false,
@@ -52,7 +52,7 @@ public class MyApplication extends FlutterApplication {
 
         MoEInitializer.initialize(getApplicationContext(), builder);
 
-        //MoEPushHelper.getInstance().setMessageListener(new MyListener());
+        MoEPushHelper.getInstance().setMessageListener(new MyListener());
 
         /*MoEGeofenceHelper.getInstance().registerGeofenceHitListener(new OnGeofenceHitListener() {
             @Override

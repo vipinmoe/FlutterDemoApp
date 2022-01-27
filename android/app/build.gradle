@@ -73,7 +73,7 @@ dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     //implementation "com.moengage:push-amp-plus:3.2.00"
     //implementation "com.moengage:hms-pushkit:2.2.00"
-    implementation "com.moengage:inbox-core:1.0.00"
+    //implementation "com.moengage:inbox-core:1.0.00"
 
     implementation 'com.google.firebase:firebase-messaging:21.0.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
