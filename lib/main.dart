@@ -11,10 +11,43 @@ import 'package:moengage_flutter/push_campaign.dart';
 /*import 'package:moengage_inbox/inbox_data.dart';
 import 'package:moengage_inbox/moengage_inbox.dart';*/
 import 'package:package_info/package_info.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  SharedPreferences.setMockInitialValues({});
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+final MoEngageFlutter _moengagePlugin = MoEngageFlutter();
+
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.toString()}");
+
+  _moengagePlugin.passFCMPushPayload(message.data);
+
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  _moengagePlugin.initialise();
+  //SharedPreferences.setMockInitialValues({});
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+
+      _moengagePlugin.passFCMPushPayload(message.data);
+    });
   runApp(MyApp());
 }
 
@@ -24,7 +57,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final MoEngageFlutter _moengagePlugin = MoEngageFlutter();
+
+  //FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   //final MoEngageInbox _moEngageInbox = MoEngageInbox();
 
   PackageInfo _packageInfo = PackageInfo(
@@ -37,7 +72,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _moengagePlugin.initialise();
     _moengagePlugin.setUpPushCallbacks(_onPushClick);
     _moengagePlugin.setUpInAppCallbacks(
         onInAppClick: _onInAppClick,
@@ -45,6 +79,7 @@ class _MyAppState extends State<MyApp> {
         onInAppDismiss: _onInAppDismiss,
         onInAppCustomAction: _onInAppCustomAction,
         onInAppSelfHandle: _onInAppSelfHandle);
+    
     _initPackageInfo();
   }
 
@@ -171,23 +206,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   _installUpdate() async {
-    debugPrint("Install or update");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int code = prefs.getInt("version_code");
-    if (code == null) {
-      debugPrint("Fresh Install, version code : " + _packageInfo.buildNumber);
-      _moengagePlugin.setAppStatus(MoEAppStatus.install);
-    } else {
-      if (int.parse(_packageInfo.buildNumber) > code) {
-        debugPrint("Update, version code : " + _packageInfo.buildNumber);
-        _moengagePlugin.setAppStatus(MoEAppStatus.update);
-      } else {
-        debugPrint("No action required for install or update");
-      }
-    }
-    //set the new version
-    code = int.parse(_packageInfo.buildNumber);
-    await prefs.setInt("version_code", code);
+    // debugPrint("Install or update");
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // int code = prefs.getInt("version_code");
+    // if (code == null) {
+    //   debugPrint("Fresh Install, version code : " + _packageInfo.buildNumber);
+    //   _moengagePlugin.setAppStatus(MoEAppStatus.install);
+    // } else {
+    //   if (int.parse(_packageInfo.buildNumber) > code) {
+    //     debugPrint("Update, version code : " + _packageInfo.buildNumber);
+    //     _moengagePlugin.setAppStatus(MoEAppStatus.update);
+    //   } else {
+    //     debugPrint("No action required for install or update");
+    //   }
+    // }
+    // //set the new version
+    // code = int.parse(_packageInfo.buildNumber);
+    // await prefs.setInt("version_code", code);
   }
 
   void _onPushClick(PushCampaign message) {
