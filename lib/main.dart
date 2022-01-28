@@ -34,6 +34,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   _moengagePlugin.initialise();
+  _moengagePlugin.setUpPushCallbacks(_onPushClick);
+    _moengagePlugin.setUpInAppCallbacks(
+        onInAppClick: _onInAppClick,
+        onInAppShown: _onInAppShown,
+        onInAppDismiss: _onInAppDismiss,
+        onInAppCustomAction: _onInAppCustomAction,
+        onInAppSelfHandle: _onInAppSelfHandle);
   //SharedPreferences.setMockInitialValues({});
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.getToken();
@@ -72,13 +79,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _moengagePlugin.setUpPushCallbacks(_onPushClick);
-    _moengagePlugin.setUpInAppCallbacks(
-        onInAppClick: _onInAppClick,
-        onInAppShown: _onInAppShown,
-        onInAppDismiss: _onInAppDismiss,
-        onInAppCustomAction: _onInAppCustomAction,
-        onInAppSelfHandle: _onInAppSelfHandle);
+    
     
     _initPackageInfo();
   }
@@ -225,7 +226,9 @@ class _MyAppState extends State<MyApp> {
     // await prefs.setInt("version_code", code);
   }
 
-  void _onPushClick(PushCampaign message) {
+}
+
+void _onPushClick(PushCampaign message) {
     print("_onPushClick() : Payload " + message.toString());
   }
 
@@ -250,4 +253,3 @@ class _MyAppState extends State<MyApp> {
     _moengagePlugin.selfHandledShown(message);
     _moengagePlugin.selfHandledDismissed(message);
   }
-}
