@@ -33,7 +33,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  _moengagePlugin.initialise();
+  
   _moengagePlugin.setUpPushCallbacks(_onPushClick);
     _moengagePlugin.setUpInAppCallbacks(
         onInAppClick: _onInAppClick,
@@ -41,6 +41,7 @@ void main() async {
         onInAppDismiss: _onInAppDismiss,
         onInAppCustomAction: _onInAppCustomAction,
         onInAppSelfHandle: _onInAppSelfHandle);
+  _moengagePlugin.initialise();
   //SharedPreferences.setMockInitialValues({});
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.getToken();
