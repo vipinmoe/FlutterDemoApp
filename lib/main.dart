@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _moengagePlugin.initialise();
+
     _moengagePlugin.setUpPushCallbacks(_onPushClick);
     _moengagePlugin.setUpInAppCallbacks(
         onInAppClick: _onInAppClick,
@@ -45,6 +45,9 @@ class _MyAppState extends State<MyApp> {
         onInAppDismiss: _onInAppDismiss,
         onInAppCustomAction: _onInAppCustomAction,
         onInAppSelfHandle: _onInAppSelfHandle);
+
+    _moengagePlugin.initialise();
+    //_moengagePlugin.enableSDKLogs();
     _initPackageInfo();
   }
 
