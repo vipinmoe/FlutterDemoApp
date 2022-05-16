@@ -25,5 +25,5 @@
     <color name="moe_inbox_color_accent">#1C64D0</color>
     <color name="moe_inbox_color_primary_dark">#006CFF</color>
     <color name="moe_inbox_color_primary">#006CFF</color>
-    <color name="moe_inbox_control_color">@color/moe_black</color>
+    <!-- <color name="moe_inbox_control_color">@color/moe_black</color> -->
 </resources>
