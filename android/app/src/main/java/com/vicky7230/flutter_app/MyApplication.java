@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.moe.pushlibrary.MoEHelper;
 import com.moengage.core.LogLevel;
+import com.moengage.core.MoESdkStateHelper;
 import com.moengage.core.MoEngage;
 import com.moengage.core.MoEngage.Builder;
 import com.moengage.core.config.FcmConfig;

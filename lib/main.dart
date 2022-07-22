@@ -8,6 +8,7 @@ import 'package:moengage_flutter/inapp_campaign.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_flutter/properties.dart';
 import 'package:moengage_flutter/push_campaign.dart';
+import 'package:moengage_flutter/push_token.dart';
 import 'package:moengage_inbox/inbox_data.dart';
 import 'package:moengage_inbox/moengage_inbox.dart';
 import 'package:package_info/package_info.dart';
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
         onInAppDismiss: _onInAppDismiss,
         onInAppCustomAction: _onInAppCustomAction,
         onInAppSelfHandle: _onInAppSelfHandle);
+    _moengagePlugin.setUpPushTokenCallback(_onPushTokenGenerated);
 
     _moengagePlugin.initialise();
     //_moengagePlugin.enableSDKLogs();
@@ -195,6 +197,12 @@ class _MyAppState extends State<MyApp> {
 
   void _onPushClick(PushCampaign message) {
     print("_onPushClick() : Payload " + message.toString());
+  }
+
+  void _onPushTokenGenerated(PushToken pushToken) {
+    print(
+        "Main : _onPushTokenGenerated() : This is callback on push token generated from native to flutter: PushToken: " +
+            pushToken.toString());
   }
 
   void _onInAppClick(InAppCampaign message) {
