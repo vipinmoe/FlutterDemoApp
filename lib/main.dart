@@ -9,8 +9,8 @@ import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_flutter/properties.dart';
 import 'package:moengage_flutter/push_campaign.dart';
 import 'package:moengage_flutter/push_token.dart';
-import 'package:moengage_inbox/inbox_data.dart';
-import 'package:moengage_inbox/moengage_inbox.dart';
+// import 'package:moengage_inbox/inbox_data.dart';
+// import 'package:moengage_inbox/moengage_inbox.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +26,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MoEngageFlutter _moengagePlugin = MoEngageFlutter();
-  final MoEngageInbox _moEngageInbox = MoEngageInbox();
+  //final MoEngageInbox _moEngageInbox = MoEngageInbox();
 
   PackageInfo _packageInfo = PackageInfo(
     appName: 'Unknown',
@@ -51,6 +51,12 @@ class _MyAppState extends State<MyApp> {
     _moengagePlugin.initialise();
     //_moengagePlugin.enableSDKLogs();
     _initPackageInfo();
+    //_moengagePlugin.setCurrentContext(["My_context", "tundndn"]);
+
+    //_moengagePlugin.showInApp();
+
+    //_moengagePlugin.resetCurrentContext();
+
   }
 
   @override
@@ -146,11 +152,11 @@ class _MyAppState extends State<MyApp> {
                 ),
                 RaisedButton(
                   onPressed: () async {
-                    InboxData data = await _moEngageInbox.fetchAllMessages();
-                    print("messages: " + data.toString());
-                    for (final message in data.messages) {
-                      print(message.toString());
-                    }
+                    // InboxData data = await _moEngageInbox.fetchAllMessages();
+                    // print("messages: " + data.toString());
+                    // for (final message in data.messages) {
+                    //   print(message.toString());
+                    // }
                   },
                   child: Text("Fetch All Messages"),
                 ),
