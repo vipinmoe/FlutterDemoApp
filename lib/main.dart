@@ -1,18 +1,26 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:moengage_flutter/app_status.dart';
-import 'package:moengage_flutter/gender.dart';
-import 'package:moengage_flutter/geo_location.dart';
-import 'package:moengage_flutter/inapp_campaign.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_flutter/properties.dart';
-import 'package:moengage_flutter/push_campaign.dart';
-import 'package:moengage_flutter/push_token.dart';
 // import 'package:moengage_inbox/inbox_data.dart';
 // import 'package:moengage_inbox/moengage_inbox.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:moengage_flutter/model/app_status.dart';
+import 'package:moengage_flutter/model/gender.dart';
+import 'package:moengage_flutter/model/geo_location.dart';
+import 'package:moengage_flutter/model/inapp/click_data.dart';
+import 'package:moengage_flutter/model/inapp/inapp_data.dart';
+import 'package:moengage_flutter/model/inapp/self_handled_data.dart';
+import 'package:moengage_flutter/model/push/push_campaign_data.dart';
+import 'package:moengage_flutter/model/push/push_token_data.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
+import 'package:moengage_flutter/properties.dart';
+// import 'package:moengage_inbox/inbox_data.dart';
+// import 'package:moengage_inbox/inbox_message.dart';
+// import 'package:moengage_inbox/moengage_inbox.dart';
 
 void main() {
   SharedPreferences.setMockInitialValues({});
@@ -25,7 +33,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final MoEngageFlutter _moengagePlugin = MoEngageFlutter();
+  final MoEngageFlutter _moengagePlugin = MoEngageFlutter("U8RR6TSZPEM5EWFBCZBNJVIJ");
   //final MoEngageInbox _moEngageInbox = MoEngageInbox();
 
   PackageInfo _packageInfo = PackageInfo(
@@ -39,14 +47,12 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    _moengagePlugin.setUpPushCallbacks(_onPushClick);
-    _moengagePlugin.setUpInAppCallbacks(
-        onInAppClick: _onInAppClick,
-        onInAppShown: _onInAppShown,
-        onInAppDismiss: _onInAppDismiss,
-        onInAppCustomAction: _onInAppCustomAction,
-        onInAppSelfHandle: _onInAppSelfHandle);
-    _moengagePlugin.setUpPushTokenCallback(_onPushTokenGenerated);
+    _moengagePlugin.setPushClickCallbackHandler(_onPushClick);
+    _moengagePlugin.setInAppShownCallbackHandler(_onInAppShown);
+    _moengagePlugin.setInAppDismissedCallbackHandler(_onInAppDismiss);
+    _moengagePlugin.setInAppClickHandler(_onInAppClick);
+    _moengagePlugin.setSelfHandledInAppHandler(_onInAppSelfHandle);
+    _moengagePlugin.setPushTokenCallbackHandler(_onPushTokenGenerated);
 
     _moengagePlugin.initialise();
     //_moengagePlugin.enableSDKLogs();
@@ -90,7 +96,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 RaisedButton(
                   onPressed: () {
-                    _moengagePlugin.optOutDataTracking(true);
+                    //.optOutDataTracking(true);
                   },
                   child: Text("optOutTracking"),
                 ),
@@ -101,10 +107,10 @@ class _MyAppState extends State<MyApp> {
                     _moengagePlugin.setLastName("Kumar");
                     _moengagePlugin.setEmail("vicky7230@gmail.com");
                     _moengagePlugin.setPhoneNumber("8708153354");
-                    _moengagePlugin.setGender(MoEGender
-                        .male); // Supported values also include MoEGender.female OR MoEGender.other
-                    _moengagePlugin.setLocation(new MoEGeoLocation(23.1,
-                        21.2)); // Pass coordinates with MoEGeoLocation instance
+                    //_moengagePlugin.setGender(MoEGender
+                    //    .male); // Supported values also include MoEGender.female OR MoEGender.other
+                    //_moengagePlugin.setLocation(new MoEGeoLocation(23.1,
+                    //    21.2)); // Pass coordinates with MoEGeoLocation instance
                     _moengagePlugin.setBirthDate(
                         "2000-12-02T08:26:21.170Z"); // date format - ` yyyy-MM-dd'T'HH:mm:ss.fff'Z'`
                   },
@@ -118,8 +124,8 @@ class _MyAppState extends State<MyApp> {
                         .addAttribute("test_int", 789)
                         .addAttribute("test_bool", false)
                         .addAttribute("attr_double", 12.32)
-                        .addAttribute(
-                            "attr_location", new MoEGeoLocation(12.1, 77.18))
+                        //.addAttribute(
+                        //    "attr_location", new MoEGeoLocation(12.1, 77.18))
                         .addAttribute("attr_array", [
                       "item1",
                       "item2",
@@ -162,7 +168,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 RaisedButton(
                   onPressed: ()  {
-                    _moengagePlugin.optOutPushTracking(false);
+                   //_moengagePlugin.optOutPushTracking(false);
                   },
                   child: Text("OPT OUT Push"),
                 ),
@@ -187,11 +193,11 @@ class _MyAppState extends State<MyApp> {
     int code = prefs.getInt("version_code");
     if (code == null) {
       debugPrint("Fresh Install, version code : " + _packageInfo.buildNumber);
-      _moengagePlugin.setAppStatus(MoEAppStatus.install);
+      //_moengagePlugin.setAppStatus(MoEAppStatus.install);
     } else {
       if (int.parse(_packageInfo.buildNumber) > code) {
         debugPrint("Update, version code : " + _packageInfo.buildNumber);
-        _moengagePlugin.setAppStatus(MoEAppStatus.update);
+       // _moengagePlugin.setAppStatus(MoEAppStatus.update);
       } else {
         debugPrint("No action required for install or update");
       }
@@ -201,33 +207,33 @@ class _MyAppState extends State<MyApp> {
     await prefs.setInt("version_code", code);
   }
 
-  void _onPushClick(PushCampaign message) {
+  void _onPushClick(PushCampaignData message) {
     print("_onPushClick() : Payload " + message.toString());
   }
 
-  void _onPushTokenGenerated(PushToken pushToken) {
+  void _onPushTokenGenerated(PushTokenData pushToken) {
     print(
         "Main : _onPushTokenGenerated() : This is callback on push token generated from native to flutter: PushToken: " +
             pushToken.toString());
   }
 
-  void _onInAppClick(InAppCampaign message) {
+  void _onInAppClick(ClickData message) {
     print("_onInAppClick() : Payload " + message.toString());
   }
 
-  void _onInAppShown(InAppCampaign message) {
+  void _onInAppShown(InAppData message) {
     print("_onInAppShown() : Payload " + message.toString());
   }
 
-  void _onInAppDismiss(InAppCampaign message) {
+  void _onInAppDismiss(InAppData message) {
     print("_onInAppDismiss() : Payload " + message.toString());
   }
 
-  void _onInAppCustomAction(InAppCampaign message) {
+  void _onInAppCustomAction(InAppData message) {
     print("_onInAppCustomAction() : Payload " + message.toString());
   }
 
-  void _onInAppSelfHandle(InAppCampaign message) {
+  void _onInAppSelfHandle(SelfHandledCampaignData message) {
     print("_onInAppSelfHandle() : Payload " + message.toString());
     _moengagePlugin.selfHandledShown(message);
     _moengagePlugin.selfHandledDismissed(message);

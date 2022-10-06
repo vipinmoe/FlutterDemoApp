@@ -8,14 +8,8 @@ import android.util.Log;
 import com.moengage.core.MoEngage;
 import com.moengage.core.internal.logger.Logger;
 import com.moengage.core.internal.utils.JsonBuilder;
-import com.moengage.plugin.base.CallbackHelper;
-import com.moengage.plugin.base.ConstantsKt;
-import com.moengage.plugin.base.PluginPushCallback;
-import com.moengage.plugin.base.UtilsKt;
-import com.moengage.plugin.base.model.EventType;
-import com.moengage.plugin.base.model.PushEvent;
-import com.moengage.plugin.base.model.PushPayload;
-import com.moengage.pushbase.PushConstants;
+
+import com.moengage.plugin.base.push.PluginPushCallback;
 import com.moengage.pushbase.model.action.NavigationAction;
 
 import org.json.JSONException;
@@ -27,7 +21,7 @@ import java.util.Set;
 
 public class MyListener extends PluginPushCallback {
 
-    Map<String, String> keyMapper = new HashMap<String, String>() {{
+    /*Map<String, String> keyMapper = new HashMap<String, String>() {{
         put(PushConstants.IS_DEFAULT_ACTION, ConstantsKt.PARAM_IS_DEFAULT_ACTION);
         put(PushConstants.NAV_ACTION, ConstantsKt.PARAM_CLICKED_ACTION);
     }};
@@ -81,5 +75,5 @@ public class MyListener extends PluginPushCallback {
         clickedJson.putString(ConstantsKt.PARAM_ACTION_TYPE, ConstantsKt.ACTION_TYPE_NAVIGATION);
         clickedJson.putJsonObject(ConstantsKt.ARGUMENT_PAYLOAD, UtilsKt.navigationActionToJson(navigationAction));
         return clickedJson.build();
-    }
+    }*/
 }

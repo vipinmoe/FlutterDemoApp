@@ -1,11 +1,6 @@
 package com.vicky7230.flutter_app;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.moe.pushlibrary.MoEHelper;
 import com.moengage.core.LogLevel;
-import com.moengage.core.MoESdkStateHelper;
 import com.moengage.core.MoEngage;
 import com.moengage.core.MoEngage.Builder;
 import com.moengage.core.config.FcmConfig;
@@ -13,10 +8,6 @@ import com.moengage.core.config.InAppConfig;
 import com.moengage.core.config.LogConfig;
 import com.moengage.core.config.NotificationConfig;
 import com.moengage.flutter.MoEInitializer;
-//import com.moengage.mi.MoEMiPushHelper;
-//import com.moengage.mi.listener.MiPushEventListener;
-import com.moengage.pushbase.MoEPushHelper;
-//import com.xiaomi.mipush.sdk.MiPushMessage;
 
 import io.flutter.app.FlutterApplication;
 
@@ -31,7 +22,6 @@ public class MyApplication extends FlutterApplication {
                                 R.drawable.ic_snow,
                                 R.drawable.download,
                                 -1,
-                                null,
                                 true,
                                 false,
                                 true
@@ -41,7 +31,6 @@ public class MyApplication extends FlutterApplication {
                         true
                 ))
                 .configureInApps(new InAppConfig(
-                        false,
                         null
                 ))
                 .configureLogs(
@@ -51,9 +40,9 @@ public class MyApplication extends FlutterApplication {
                         )
                 );
 
-        MoEInitializer.initialize(getApplicationContext(), builder);
+        MoEInitializer.initialiseDefaultInstance(getApplicationContext(), builder);
 
-        MoEPushHelper.getInstance().setMessageListener(new MyListener());
+        //MoEPushHelper.getInstance().setMessageListener(new MyListener());
 
         /*MoEGeofenceHelper.getInstance().registerGeofenceHitListener(new OnGeofenceHitListener() {
             @Override
