@@ -63,6 +63,9 @@ class _MyAppState extends State<MyApp> {
 
     //_moengagePlugin.resetCurrentContext();
 
+    //android 13 push permission
+    _moengagePlugin.requestPushPermissionAndroid();
+
   }
 
   @override

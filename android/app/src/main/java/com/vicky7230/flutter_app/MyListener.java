@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.moengage.core.MoEAppStateHelper;
+import com.moengage.core.MoECoreHelper;
+import com.moengage.core.MoESdkStateHelper;
 import com.moengage.core.MoEngage;
 import com.moengage.core.internal.logger.Logger;
 import com.moengage.core.internal.utils.JsonBuilder;
@@ -21,59 +24,12 @@ import java.util.Set;
 
 public class MyListener extends PluginPushCallback {
 
-    /*Map<String, String> keyMapper = new HashMap<String, String>() {{
-        put(PushConstants.IS_DEFAULT_ACTION, ConstantsKt.PARAM_IS_DEFAULT_ACTION);
-        put(PushConstants.NAV_ACTION, ConstantsKt.PARAM_CLICKED_ACTION);
-    }};
-
     @Override
-    public void onHandleRedirection(Activity activity, Bundle payload) {
+    public void onNotificationClick(Activity activity, Bundle payload) {
 
-        try {
-            if (MoEngage.isAppForeground()) {
+        //check if the app is in background and killed state and handle via custom code
 
-                Log.e("ERROR :", "Notifcation click will not do anything");
-
-                CallbackHelper.INSTANCE.sendOrQueueEvent(
-                        new PushEvent(
-                                EventType.PUSH_CLICKED,
-                                new PushPayload(pushPayloadToMap(payload))
-                        )
-                );
-                //super.onHandleRedirection(activity, payload);
-            } else {
-                super.onHandleRedirection(activity, payload);
-            }
-
-        } catch (Exception e) {
-            Logger.e("$tag onHandleRedirection() : ", e);
-        }
+        //call the below only when you want the sdk to handle the click redirection
+        super.onNotificationClick(activity, payload);
     }
-
-    private Map<String, Object> pushPayloadToMap(Bundle bundle) throws JSONException {
-        Map map = new HashMap<String, Object>();
-        Set<String> keys = bundle.keySet();
-        for (String key : keys) {
-            if (key == PushConstants.NAV_ACTION) {
-                Parcelable parcel = bundle.getParcelable(key);
-                if (parcel != null) {
-                    NavigationAction navigationAction = (NavigationAction) parcel;
-                    map.put(UtilsKt.transform(key, keyMapper), getNavClickActionJson(navigationAction));
-                }
-            } else {
-                Object value = bundle.get(key);
-                if (value != null) {
-                    map.put(UtilsKt.transform(key, keyMapper), value);
-                }
-            }
-        }
-        return map;
-    }
-
-    private JSONObject getNavClickActionJson(NavigationAction navigationAction) throws JSONException {
-        JsonBuilder clickedJson = new JsonBuilder();
-        clickedJson.putString(ConstantsKt.PARAM_ACTION_TYPE, ConstantsKt.ACTION_TYPE_NAVIGATION);
-        clickedJson.putJsonObject(ConstantsKt.ARGUMENT_PAYLOAD, UtilsKt.navigationActionToJson(navigationAction));
-        return clickedJson.build();
-    }*/
 }
